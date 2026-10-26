@@ -1,6 +1,6 @@
 # Palatschinken-Stand – Verkaufszähler
 
-Die öffentliche `index.html` zeigt nur den aktuellen Gesamtstand. Verkäufe können ausschließlich auf `Admin.html` nach Anmeldung mit einem Admin-Konto registriert werden.
+Die öffentliche `index.html` zeigt die Gesamtzahl sowie getrennte Verkaufszahlen für Marille, Erdbeere, Nutella, Himbeere, Powidl und „Käfer · eigene Kategorie“. Nur angemeldete Benutzer können Zähler auf `Admin.html` ändern.
 
 ## Website veröffentlichen (GitHub Pages)
 
@@ -9,13 +9,15 @@ Die öffentliche `index.html` zeigt nur den aktuellen Gesamtstand. Verkäufe kö
 3. Wähle den Branch **main** und den Ordner **/(root)** und speichere.
 4. Die Website ist unter https://roms-evgym.github.io/Pala-Stand/ erreichbar.
 
-## Einmalige Einrichtung der Datenbank (ohne GitHub Actions)
+## Supabase einrichten (ohne GitHub Actions)
 
-1. Ein kostenloses Projekt unter https://supabase.com erstellen.
-2. Im Supabase-Dashboard den **SQL Editor** öffnen und den gesamten Inhalt von `supabase-setup.sql` ausführen.
-3. Unter **Project Settings → API** die **Project URL** und den öffentlichen **anon/publishable key** kopieren und in `config.js` einsetzen. Niemals den `service_role`-Key in diese Website eintragen.
+1. Öffne dein Supabase-Projekt und den **SQL Editor**.
+2. Führe den gesamten Inhalt von `supabase-setup.sql` aus. Das Skript erstellt die Tabelle `sales_counters`, sechs Kategorien und geschützte RPC-Funktionen. Die bisherige Tabelle `sales` bleibt bestehen.
+3. `config.js` muss die Projekt-URL und den öffentlichen Publishable Key enthalten. Niemals den `service_role`- oder Secret-Key in die Website eintragen.
 4. Unter **Authentication → Sign In / Providers** E-Mail/Passwort aktivieren.
-5. Unter **Authentication → Settings** öffentliche Registrierungen/Sign-ups deaktivieren. Danach unter **Authentication → Users** für jeden Admin einen Benutzer anlegen. So kann nicht jeder Besucher selbst ein Admin-Konto erstellen.
-6. Nach der Veröffentlichung GitHub Pages öffnen. Auf `Admin.html` mit einem angelegten Admin-Konto anmelden und pro Verkauf einmal den Button drücken.
+5. Öffentliche Registrierungen deaktivieren und Admin-Konten unter **Authentication → Users** manuell anlegen.
+6. Öffne `Admin.html`, melde dich an und verwende pro Sorte die Buttons **+1**, **−1** und **Zurücksetzen**.
 
-Die Zahl wird in Supabase gespeichert, nicht in `sales.json`. Die Startseite zeigt sie öffentlich an; nur angemeldete Benutzer können den Zähler erhöhen. Die Website benötigt Internetzugriff auf Supabase.
+Die Zähler werden zentral in Supabase gespeichert. Die öffentliche Seite kann sie nur lesen und aktualisiert sich automatisch. GitHub Actions werden nicht verwendet.
+
+„Käfer“ ist derzeit als eigene, separat gezählte Kategorie eingerichtet; die genaue Bedeutung kann später im Label geändert werden.
