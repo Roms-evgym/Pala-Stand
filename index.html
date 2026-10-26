@@ -8,61 +8,78 @@
   <style>
     :root { color-scheme:light; --ink:#302218; --muted:#76685c; --cream:#fff8ed; --paper:#fffdf9; --brown:#7c3f18; --line:#ead9c5; }
     * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 62%); color:var(--ink); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    main { width:min(100%,560px); text-align:center; background:var(--paper); border:1px solid var(--line); border-radius:28px; padding:clamp(24px,6vw,48px); box-shadow:0 18px 60px #633a1712; }
-    .emoji { font-size:54px; line-height:1.2; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:22px; background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 62%); color:var(--ink); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(100%,760px); background:var(--paper); border:1px solid var(--line); border-radius:28px; padding:clamp(22px,5vw,42px); box-shadow:0 18px 60px #633a1712; }
+    header { text-align:center; }
+    .emoji { font-size:52px; line-height:1.2; }
     .eyebrow { margin:12px 0 8px; color:var(--brown); font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
-    h1 { margin:0; font-size:clamp(2rem,7vw,3rem); letter-spacing:-.04em; }
-    .intro { color:var(--muted); line-height:1.6; margin:12px auto 28px; max-width:36ch; }
-    .counter { border-radius:22px; background:#fff2d6; padding:22px 16px; border:1px solid #f4dfb1; }
-    .number { display:block; font-size:clamp(4rem,18vw,6.5rem); line-height:1; font-weight:900; letter-spacing:-.06em; color:var(--brown); font-variant-numeric:tabular-nums; }
-    .unit { display:block; margin-top:10px; font-weight:750; }
-    .updated { min-height:1.4em; margin:12px 0 0; font-size:.84rem; color:var(--muted); }
+    h1 { margin:0; text-align:center; font-size:clamp(2rem,7vw,3rem); letter-spacing:-.04em; }
+    .intro { text-align:center; color:var(--muted); line-height:1.6; margin:12px auto 26px; max-width:42ch; }
+    .grand { text-align:center; border-radius:18px; background:#fff2d6; padding:18px; border:1px solid #f4dfb1; margin-bottom:18px; }
+    .grand-number { display:block; font-size:clamp(3rem,12vw,4.5rem); line-height:1; font-weight:900; letter-spacing:-.05em; color:var(--brown); font-variant-numeric:tabular-nums; }
+    .grand-label { display:block; margin-top:8px; font-weight:800; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr)); gap:12px; }
+    .item { border:1px solid var(--line); border-radius:16px; padding:18px 12px; text-align:center; background:#fffdf9; }
+    .item h2 { font-size:1rem; margin:0 0 10px; }
+    .count { display:block; color:var(--brown); font-size:2.7rem; font-weight:900; line-height:1.1; font-variant-numeric:tabular-nums; }
+    .updated { min-height:1.4em; margin:14px 0 0; text-align:center; font-size:.84rem; color:var(--muted); }
     .error { color:#9e2828; }
-    footer { margin-top:28px; font-size:.8rem; color:var(--muted); }
+    footer { margin-top:24px; text-align:center; font-size:.8rem; color:var(--muted); }
     footer a { color:inherit; }
   </style>
 </head>
 <body>
   <main>
-    <div class="emoji" aria-hidden="true">🥞</div>
-    <p class="eyebrow">Frisch aus der Pfanne</p>
-    <h1>Palatschinken-Stand</h1>
-    <p class="intro">Jede verkaufte Palatschinke zählt. Hier seht ihr alle gemeinsam den aktuellen Verkaufsstand!</p>
-    <section class="counter" aria-live="polite" aria-atomic="true">
-      <span class="number" id="total">…</span>
-      <span class="unit">Palatschinken verkauft</span>
-      <p class="updated" id="updated">Verkaufszahl wird geladen …</p>
+    <header>
+      <div class="emoji" aria-hidden="true">🥞</div>
+      <p class="eyebrow">Frisch aus der Pfanne</p>
+      <h1>Palatschinken-Stand</h1>
+      <p class="intro">Hier seht ihr gemeinsam die aktuellen Verkaufszahlen für jede Sorte.</p>
+    </header>
+    <section class="grand" aria-live="polite">
+      <span class="grand-number" id="grand-total">…</span>
+      <span class="grand-label">Palatschinken insgesamt</span>
     </section>
+    <section class="grid" id="counter-grid" aria-label="Verkaufszahlen nach Sorte">
+      <article class="item"><h2>Marille</h2><span class="count" id="count-marille">…</span></article>
+      <article class="item"><h2>Erdbeere</h2><span class="count" id="count-erdbeere">…</span></article>
+      <article class="item"><h2>Nutella</h2><span class="count" id="count-nutella">…</span></article>
+      <article class="item"><h2>Himbeere</h2><span class="count" id="count-himbeere">…</span></article>
+      <article class="item"><h2>Powidl</h2><span class="count" id="count-powidl">…</span></article>
+      <article class="item"><h2>Käfer · eigene Kategorie</h2><span class="count" id="count-kaefer">…</span></article>
+    </section>
+    <p class="updated" id="updated" role="status">Verkaufszahlen werden geladen …</p>
     <footer>Öffentliche Verkaufsanzeige · Aktualisiert automatisch</footer>
   </main>
   <script src="./config.js"></script>
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-    const totalEl = document.getElementById("total");
+    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaefer"];
+    const fmt = new Intl.NumberFormat("de-AT");
     const updatedEl = document.getElementById("updated");
+    const grandEl = document.getElementById("grand-total");
     const configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
       !window.SUPABASE_URL.includes("DEIN-PROJEKT") &&
       !window.SUPABASE_ANON_KEY.includes("DEIN-ANON-KEY");
-    function showError(message) {
-      totalEl.textContent = "–";
-      updatedEl.textContent = message;
+    function showError() {
+      grandEl.textContent = "–";
+      ids.forEach(id => document.getElementById("count-" + id).textContent = "–");
+      updatedEl.textContent = "Verkaufszahlen gerade nicht verfügbar. Bitte später erneut versuchen.";
       updatedEl.classList.add("error");
     }
     if (!configured) {
-      showError("Datenbank noch nicht eingerichtet.");
+      showError();
     } else {
       const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
       async function loadSales() {
-        const { data, error } = await supabase.from("sales").select("total, updated_at").eq("id", 1).single();
-        if (error || !data) {
-          showError("Verkaufszahl gerade nicht verfügbar.");
-          return;
-        }
-        totalEl.textContent = new Intl.NumberFormat("de-AT").format(Number(data.total) || 0);
-        updatedEl.textContent = data.updated_at
-          ? "Zuletzt aktualisiert: " + new Date(data.updated_at).toLocaleString("de-AT")
-          : "Noch keine Verkäufe registriert";
+        const { data, error } = await supabase.from("sales_counters").select("id,total,updated_at");
+        if (error || !data) { showError(); return; }
+        const values = Object.fromEntries(data.map(row => [row.id, Number(row.total) || 0]));
+        if (ids.some(id => values[id] === undefined)) { showError(); return; }
+        ids.forEach(id => document.getElementById("count-" + id).textContent = fmt.format(values[id]));
+        grandEl.textContent = fmt.format(ids.reduce((sum, id) => sum + values[id], 0));
+        const latest = data.map(row => row.updated_at).filter(Boolean).sort().at(-1);
+        updatedEl.textContent = latest ? "Zuletzt aktualisiert: " + new Date(latest).toLocaleString("de-AT") : "Noch keine Verkäufe registriert";
         updatedEl.classList.remove("error");
       }
       loadSales();
