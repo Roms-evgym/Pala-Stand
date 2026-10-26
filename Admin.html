@@ -8,81 +8,80 @@
   <style>
     :root { color-scheme:light; --ink:#302218; --muted:#76685c; --cream:#fff8ed; --paper:#fffdf9; --brown:#7c3f18; --line:#ead9c5; }
     * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:22px; background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 62%); color:var(--ink); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    main { width:min(100%,520px); text-align:center; background:var(--paper); border:1px solid var(--line); border-radius:26px; padding:clamp(24px,6vw,44px); box-shadow:0 18px 60px #633a1712; }
-    .emoji { font-size:52px; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:20px; background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 62%); color:var(--ink); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(100%,860px); background:var(--paper); border:1px solid var(--line); border-radius:26px; padding:clamp(20px,5vw,40px); box-shadow:0 18px 60px #633a1712; }
+    header { text-align:center; }
+    .emoji { font-size:48px; }
     .eyebrow { color:var(--brown); font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
     h1 { margin:8px 0 12px; font-size:clamp(2rem,7vw,2.7rem); letter-spacing:-.04em; }
-    p { color:var(--muted); line-height:1.6; }
-    .counter { margin:24px 0; padding:20px; border-radius:18px; background:#fff2d6; border:1px solid #f4dfb1; }
-    .number { display:block; font-size:clamp(3.5rem,16vw,5.5rem); line-height:1; font-weight:900; color:var(--brown); font-variant-numeric:tabular-nums; }
-    .unit { display:block; margin-top:8px; font-weight:750; color:var(--ink); }
-    .updated { font-size:.82rem; margin-bottom:0; }
-    .button { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:16px 18px; border:0; border-radius:14px; background:var(--brown); color:#fff; font:inherit; font-weight:850; cursor:pointer; box-shadow:0 5px 0 #54270d; }
-    .button:hover { filter:brightness(1.08); }
-    .button:disabled { opacity:.55; cursor:wait; }
-    .button.secondary { background:#8b7766; box-shadow:0 5px 0 #655343; }
-    .button.danger { background:#a52d2d; box-shadow:0 5px 0 #741c1c; }
-    .admin-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
-    .admin-actions .button { padding:13px 10px; }
-    @media (max-width:380px) { .admin-actions { grid-template-columns:1fr; } }
-    .button:disabled { opacity:.55; cursor:wait; }
+    p { color:var(--muted); line-height:1.55; }
     .field { display:block; text-align:left; margin:14px 0; font-weight:700; color:var(--ink); }
     input { display:block; width:100%; margin-top:6px; padding:12px; border:1px solid var(--line); border-radius:10px; font:inherit; }
-    .hint { font-size:.87rem; margin-top:18px; }
+    .button { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px 12px; border:0; border-radius:12px; background:var(--brown); color:#fff; font:inherit; font-weight:850; cursor:pointer; box-shadow:0 4px 0 #54270d; }
+    .button:hover { filter:brightness(1.08); }
+    .button:disabled { opacity:.55; cursor:wait; }
+    .button.secondary { background:#8b7766; box-shadow:0 4px 0 #655343; }
+    .button.danger { background:#a52d2d; box-shadow:0 4px 0 #741c1c; }
+    .updated { min-height:1.4em; font-size:.86rem; text-align:center; }
     .error { color:#9e2828; }
-    .back { display:inline-block; margin-top:20px; color:var(--brown); font-weight:750; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:14px; margin-top:22px; }
+    .item { border:1px solid var(--line); border-radius:18px; padding:16px; background:#fffdf9; text-align:center; }
+    .item h2 { margin:0 0 8px; font-size:1.15rem; }
+    .count { display:block; margin:10px 0 16px; color:var(--brown); font-size:3rem; line-height:1; font-weight:900; font-variant-numeric:tabular-nums; }
+    .actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .actions .button { padding:12px 8px; }
+    .actions .reset { grid-column:1/-1; }
+    .grand { margin-top:20px; padding:16px; text-align:center; border-radius:16px; background:#fff2d6; border:1px solid #f4dfb1; }
+    .grand strong { display:block; font-size:2rem; color:var(--brown); }
+    .logout { display:block; margin:20px auto 0; background:none; border:0; color:var(--brown); text-decoration:underline; cursor:pointer; font:inherit; font-weight:750; }
+    .hint { text-align:center; font-size:.86rem; }
+    .back { display:block; text-align:center; margin-top:18px; color:var(--brown); font-weight:750; }
     [hidden] { display:none !important; }
   </style>
 </head>
 <body>
   <main>
-    <div class="emoji" aria-hidden="true">🥞</div>
-    <p class="eyebrow">Adminbereich</p>
-    <h1>Verkauf registrieren</h1>
-    <p>Admins melden sich an und drücken pro verkaufter Palatschinke einmal auf den Button.</p>
-
+    <header>
+      <div class="emoji" aria-hidden="true">🥞</div>
+      <p class="eyebrow">Adminbereich</p>
+      <h1>Verkaufszähler verwalten</h1>
+      <p>Für jede Sorte gibt es einen eigenen Zähler. Plus, Minus und Zurücksetzen wirken nur auf die ausgewählte Sorte.</p>
+    </header>
     <form id="login-form">
       <label class="field">Admin-E-Mail<input id="email" type="email" autocomplete="username" required></label>
       <label class="field">Passwort<input id="password" type="password" autocomplete="current-password" required></label>
       <button class="button" id="login-button" type="submit">Anmelden</button>
       <p class="updated" id="login-status" role="status"></p>
     </form>
-
     <section id="admin-panel" hidden>
-      <section class="counter" aria-live="polite" aria-atomic="true">
-        <span class="number" id="total">…</span>
-        <span class="unit">Palatschinken bisher verkauft</span>
-        <p class="updated" id="updated">Verkaufszahl wird geladen …</p>
+      <div class="grand">Gesamtzahl über alle Kategorien<strong id="grand-total">…</strong></div>
+      <section class="grid" aria-label="Zähler bearbeiten">
+        <article class="item" data-counter="marille"><h2>Marille</h2><span class="count" id="count-marille">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Marille zurücksetzen</button></div></article>
+        <article class="item" data-counter="erdbeere"><h2>Erdbeere</h2><span class="count" id="count-erdbeere">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Erdbeere zurücksetzen</button></div></article>
+        <article class="item" data-counter="nutella"><h2>Nutella</h2><span class="count" id="count-nutella">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Nutella zurücksetzen</button></div></article>
+        <article class="item" data-counter="himbeere"><h2>Himbeere</h2><span class="count" id="count-himbeere">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Himbeere zurücksetzen</button></div></article>
+        <article class="item" data-counter="powidl"><h2>Powidl</h2><span class="count" id="count-powidl">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Powidl zurücksetzen</button></div></article>
+        <article class="item" data-counter="kaefer"><h2>Käfer · eigene Kategorie</h2><span class="count" id="count-kaefer">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Käfer zurücksetzen</button></div></article>
       </section>
-      <button class="button" id="sell-button" type="button">＋ Eine Palatschinke zählen</button>
-      <div class="admin-actions">
-        <button class="button secondary" id="undo-button" type="button">− 1 abziehen</button>
-        <button class="button danger" id="reset-button" type="button">↺ Zähler zurücksetzen</button>
-      </div>
       <p class="updated" id="sale-status" role="status"></p>
-      <button id="logout-button" type="button" style="margin-top:18px;background:none;border:0;color:#7c3f18;text-decoration:underline;cursor:pointer">Abmelden</button>
+      <button class="logout" id="logout-button" type="button">Abmelden</button>
     </section>
-    <p class="hint">Die Zahl wird gemeinsam gespeichert und ist auf der öffentlichen Startseite sichtbar.</p>
+    <p class="hint">Die Zähler werden gemeinsam in Supabase gespeichert. Die öffentliche Startseite kann die Werte nur anzeigen.</p>
     <a class="back" href="./index.html">← Zur öffentlichen Verkaufsanzeige</a>
   </main>
   <script src="./config.js"></script>
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaefer"];
+    const fmt = new Intl.NumberFormat("de-AT");
     const loginForm = document.getElementById("login-form");
     const loginStatus = document.getElementById("login-status");
     const saleStatus = document.getElementById("sale-status");
     const panel = document.getElementById("admin-panel");
-    const totalEl = document.getElementById("total");
-    const updatedEl = document.getElementById("updated");
     const loginButton = document.getElementById("login-button");
-    const sellButton = document.getElementById("sell-button");
-    const undoButton = document.getElementById("undo-button");
-    const resetButton = document.getElementById("reset-button");
     const configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
       !window.SUPABASE_URL.includes("DEIN-PROJEKT") &&
       !window.SUPABASE_ANON_KEY.includes("DEIN-ANON-KEY");
-
     if (!configured) {
       loginButton.disabled = true;
       loginStatus.textContent = "Datenbank noch nicht eingerichtet. Bitte zuerst config.js ausfüllen.";
@@ -90,25 +89,23 @@
     } else {
       const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
       async function loadSales() {
-        const { data, error } = await supabase.from("sales").select("total, updated_at").eq("id", 1).single();
-        if (error || !data) {
-          totalEl.textContent = "–";
-          updatedEl.textContent = "Verkaufszahl nicht verfügbar.";
-          updatedEl.classList.add("error");
+        const { data, error } = await supabase.from("sales_counters").select("id,total,updated_at");
+        if (error || !data || ids.some(id => !data.some(row => row.id === id))) {
+          saleStatus.textContent = "Verkaufszahlen nicht verfügbar. Wurde das neue SQL in Supabase ausgeführt?";
+          saleStatus.classList.add("error");
           return;
         }
-        totalEl.textContent = new Intl.NumberFormat("de-AT").format(Number(data.total) || 0);
-        updatedEl.textContent = data.updated_at
-          ? "Zuletzt aktualisiert: " + new Date(data.updated_at).toLocaleString("de-AT")
-          : "Noch keine Verkäufe registriert";
-        updatedEl.classList.remove("error");
+        const values = Object.fromEntries(data.map(row => [row.id, Number(row.total) || 0]));
+        ids.forEach(id => document.getElementById("count-" + id).textContent = fmt.format(values[id]));
+        document.getElementById("grand-total").textContent = fmt.format(ids.reduce((sum, id) => sum + values[id], 0));
+        saleStatus.classList.remove("error");
       }
       async function refreshSession() {
         const { data: { session } } = await supabase.auth.getSession();
         const signedIn = Boolean(session);
         loginForm.hidden = signedIn;
         panel.hidden = !signedIn;
-        if (signedIn) loadSales();
+        if (signedIn) await loadSales();
       }
       loginForm.addEventListener("submit", async event => {
         event.preventDefault();
@@ -128,45 +125,27 @@
           await refreshSession();
         }
       });
-      sellButton.addEventListener("click", async () => {
-        sellButton.disabled = true;
-        saleStatus.textContent = "Verkaufszahl wird gespeichert …";
+      async function runCounterAction(button, counterId, action) {
+        if (action === "reset" && !window.confirm("Möchtest du den Zähler für " + counterId + " wirklich auf 0 zurücksetzen?")) return;
+        const card = button.closest("[data-counter]");
+        const buttons = [...card.querySelectorAll("button")];
+        buttons.forEach(b => b.disabled = true);
+        saleStatus.textContent = "Speichere …";
         saleStatus.classList.remove("error");
-        const { error } = await supabase.rpc("increment_sales");
-        sellButton.disabled = false;
+        const rpc = action === "increment" ? "increment_sales_counter" : action === "decrement" ? "decrement_sales_counter" : "reset_sales_counter";
+        const { error } = await supabase.rpc(rpc, { p_counter_id: counterId });
+        buttons.forEach(b => b.disabled = false);
         if (error) {
           saleStatus.textContent = "Fehler: " + (error.message || "Unbekannter Datenbankfehler") + (error.code ? " (Code " + error.code + ")" : "");
           saleStatus.classList.add("error");
           return;
         }
-        saleStatus.textContent = "Verkauf gespeichert!";
-        await loadSales();
-      });
-      async function runCounterAction(button, rpcName, successMessage) {
-        button.disabled = true;
-        sellButton.disabled = true;
-        undoButton.disabled = true;
-        resetButton.disabled = true;
-        saleStatus.textContent = "Verkaufszahl wird gespeichert …";
-        saleStatus.classList.remove("error");
-        const { error } = await supabase.rpc(rpcName);
-        sellButton.disabled = false;
-        undoButton.disabled = false;
-        resetButton.disabled = false;
-        if (error) {
-          saleStatus.textContent = "Fehler: " + (error.message || "Unbekannter Datenbankfehler") + (error.code ? " (Code " + error.code + ")" : "");
-          saleStatus.classList.add("error");
-          return;
-        }
-        saleStatus.textContent = successMessage;
+        const labels = { increment: "Verkauf hinzugefügt.", decrement: "Ein Verkauf abgezogen.", reset: "Zähler zurückgesetzt." };
+        saleStatus.textContent = labels[action];
         await loadSales();
       }
-      undoButton.addEventListener("click", async () => {
-        await runCounterAction(undoButton, "decrement_sales", "Eine Palatschinke abgezogen.");
-      });
-      resetButton.addEventListener("click", async () => {
-        if (!window.confirm("Möchtest du den Verkaufszähler wirklich auf 0 zurücksetzen?")) return;
-        await runCounterAction(resetButton, "reset_sales", "Verkaufszähler wurde auf 0 zurückgesetzt.");
+      document.querySelectorAll("[data-counter] button[data-action]").forEach(button => {
+        button.addEventListener("click", () => runCounterAction(button, button.closest("[data-counter]").dataset.counter, button.dataset.action));
       });
       document.getElementById("logout-button").addEventListener("click", async () => {
         await supabase.auth.signOut();
