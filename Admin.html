@@ -135,7 +135,7 @@
         const { error } = await supabase.rpc("increment_sales");
         sellButton.disabled = false;
         if (error) {
-          saleStatus.textContent = "Konnte nicht speichern. Bitte erneut anmelden oder Verbindung prüfen.";
+          saleStatus.textContent = "Fehler: " + (error.message || "Unbekannter Datenbankfehler") + (error.code ? " (Code " + error.code + ")" : "");
           saleStatus.classList.add("error");
           return;
         }
@@ -154,7 +154,7 @@
         undoButton.disabled = false;
         resetButton.disabled = false;
         if (error) {
-          saleStatus.textContent = "Aktion fehlgeschlagen. Bitte Verbindung und Datenbankeinrichtung prüfen.";
+          saleStatus.textContent = "Fehler: " + (error.message || "Unbekannter Datenbankfehler") + (error.code ? " (Code " + error.code + ")" : "");
           saleStatus.classList.add("error");
           return;
         }
