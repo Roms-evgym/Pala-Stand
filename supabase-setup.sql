@@ -2,11 +2,36 @@
 -- Dieses Skript kann mehrfach ausgeführt werden. Bestehende Tabelle public.sales bleibt unverändert.
 
 create table if not exists public.sales_counters (
-  id text primary key check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee')),
+  id text primary key check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee', 'kaefer')),
   label text not null,
   total bigint not null default 0 check (total >= 0),
   updated_at timestamptz
 );
+
+-- Kompatibilität mit einer bereits angelegten Tabelle aus der vorherigen Version.
+alter table public.sales_counters drop constraint if exists sales_counters_id_check;
+alter table public.sales_counters
+  add constraint sales_counters_id_check
+  check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee', 'kaefer'));
+
+-- Falls der alte Käfer-Zähler existiert, übernehmen wir seinen Wert in Kaffee.
+do $
+begin
+  if exists (select 1 from public.sales_counters where id = 'kaefer') then
+    if exists (select 1 from public.sales_counters where id = 'kaffee') then
+      update public.sales_counters
+      set total = total + (select total from public.sales_counters where id = 'kaefer'),
+          updated_at = greatest(updated_at, (select updated_at from public.sales_counters where id = 'kaefer'))
+      where id = 'kaffee';
+      delete from public.sales_counters where id = 'kaefer';
+    else
+      update public.sales_counters
+      set id = 'kaffee', label = 'Kaffee'
+      where id = 'kaefer';
+    end if;
+  end if;
+end;
+$;
 
 insert into public.sales_counters (id, label, total, updated_at) values
   ('marille', 'Marille', 0, null),
@@ -17,11 +42,6 @@ insert into public.sales_counters (id, label, total, updated_at) values
   ('kaffee', 'Kaffee', 0, null)
 on conflict (id) do nothing;
 
--- Falls die frühere Kategorie "Käfer" bereits angelegt wurde, Daten sicher zu "Kaffee" migrieren.
-update public.sales_counters
-set id = 'kaffee', label = 'Kaffee'
-where id = 'kaefer'
-  and not exists (select 1 from public.sales_counters where id = 'kaffee');
 
 alter table public.sales_counters enable row level security;
 
