@@ -165,7 +165,8 @@
         const values = Object.fromEntries(data.map(row => [row.id, Number(row.total) || 0]));
         if (ids.some(id => values[id] === undefined)) { showError(); return; }
         ids.forEach(id => document.getElementById("count-" + id).textContent = fmt.format(values[id]));
-        grandEl.textContent = fmt.format(ids.filter(id => id !== "kaffee").reduce((sum, id) => sum + values[id], 0));\n        renderStats(values);
+        grandEl.textContent = fmt.format(ids.filter(id => id !== "kaffee").reduce((sum, id) => sum + values[id], 0));
+        renderStats(values);
         const latest = data.map(row => row.updated_at).filter(Boolean).sort().at(-1);
         updatedEl.textContent = latest ? "Zuletzt aktualisiert: " + new Date(latest).toLocaleString("de-AT") : "Noch keine Verkäufe registriert";
         updatedEl.classList.remove("error");
