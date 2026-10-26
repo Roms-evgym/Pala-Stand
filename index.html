@@ -46,7 +46,7 @@
       <article class="item"><h2>Nutella</h2><span class="count" id="count-nutella">…</span></article>
       <article class="item"><h2>Himbeere</h2><span class="count" id="count-himbeere">…</span></article>
       <article class="item"><h2>Powidl</h2><span class="count" id="count-powidl">…</span></article>
-      <article class="item"><h2>Käfer · eigene Kategorie</h2><span class="count" id="count-kaefer">…</span></article>
+      <article class="item"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span></article>
     </section>
     <p class="updated" id="updated" role="status">Verkaufszahlen werden geladen …</p>
     <footer>Öffentliche Verkaufsanzeige · Aktualisiert automatisch</footer>
@@ -54,7 +54,7 @@
   <script src="./config.js"></script>
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaefer"];
+    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaffee"];
     const fmt = new Intl.NumberFormat("de-AT");
     const updatedEl = document.getElementById("updated");
     const grandEl = document.getElementById("grand-total");
