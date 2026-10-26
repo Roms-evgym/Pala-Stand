@@ -18,11 +18,15 @@
     .number { display:block; font-size:clamp(3.5rem,16vw,5.5rem); line-height:1; font-weight:900; color:var(--brown); font-variant-numeric:tabular-nums; }
     .unit { display:block; margin-top:8px; font-weight:750; color:var(--ink); }
     .updated { font-size:.82rem; margin-bottom:0; }
-    .button { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:16px 18px; border-radius:14px; background:var(--brown); color:#fff; text-decoration:none; font-weight:850; box-shadow:0 5px 0 #54270d; }
+    .button { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:16px 18px; border:0; border-radius:14px; background:var(--brown); color:#fff; font:inherit; font-weight:850; cursor:pointer; box-shadow:0 5px 0 #54270d; }
     .button:hover { filter:brightness(1.08); }
+    .button:disabled { opacity:.55; cursor:wait; }
+    .field { display:block; text-align:left; margin:14px 0; font-weight:700; color:var(--ink); }
+    input { display:block; width:100%; margin-top:6px; padding:12px; border:1px solid var(--line); border-radius:10px; font:inherit; }
     .hint { font-size:.87rem; margin-top:18px; }
     .error { color:#9e2828; }
     .back { display:inline-block; margin-top:20px; color:var(--brown); font-weight:750; }
+    [hidden] { display:none !important; }
   </style>
 </head>
 <body>
@@ -30,39 +34,113 @@
     <div class="emoji" aria-hidden="true">🥞</div>
     <p class="eyebrow">Adminbereich</p>
     <h1>Verkauf registrieren</h1>
-    <p>Für jede verkaufte Palatschinke einmal den Button verwenden. Die Gesamtzahl ist öffentlich sichtbar.</p>
-    <section class="counter" aria-live="polite" aria-atomic="true">
-      <span class="number" id="total">…</span>
-      <span class="unit">Palatschinken bisher verkauft</span>
-      <p class="updated" id="updated">Verkaufszahl wird geladen …</p>
+    <p>Admins melden sich an und drücken pro verkaufter Palatschinke einmal auf den Button.</p>
+
+    <form id="login-form">
+      <label class="field">Admin-E-Mail<input id="email" type="email" autocomplete="username" required></label>
+      <label class="field">Passwort<input id="password" type="password" autocomplete="current-password" required></label>
+      <button class="button" id="login-button" type="submit">Anmelden</button>
+      <p class="updated" id="login-status" role="status"></p>
+    </form>
+
+    <section id="admin-panel" hidden>
+      <section class="counter" aria-live="polite" aria-atomic="true">
+        <span class="number" id="total">…</span>
+        <span class="unit">Palatschinken bisher verkauft</span>
+        <p class="updated" id="updated">Verkaufszahl wird geladen …</p>
+      </section>
+      <button class="button" id="sell-button" type="button">＋ Eine Palatschinke zählen</button>
+      <p class="updated" id="sale-status" role="status"></p>
+      <button id="logout-button" type="button" style="margin-top:18px;background:none;border:0;color:#7c3f18;text-decoration:underline;cursor:pointer">Abmelden</button>
     </section>
-    <a class="button" href="https://github.com/Roms-evgym/Pala-Stand/actions/workflows/register-sale.yml">
-      <span aria-hidden="true">＋</span> Eine Palatschinke zählen
-    </a>
-    <p class="hint">GitHub öffnet sich, damit du den Verkauf bestätigen kannst. Melde dich mit einem Konto an, das Schreibrechte für das Repository hat, und wähle <strong>Run workflow</strong>. Erst nach erfolgreichem Workflow wird die Zahl erhöht.</p>
+    <p class="hint">Die Zahl wird gemeinsam gespeichert und ist auf der öffentlichen Startseite sichtbar.</p>
     <a class="back" href="./index.html">← Zur öffentlichen Verkaufsanzeige</a>
   </main>
-  <script>
+  <script src="./config.js"></script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    const loginForm = document.getElementById("login-form");
+    const loginStatus = document.getElementById("login-status");
+    const saleStatus = document.getElementById("sale-status");
+    const panel = document.getElementById("admin-panel");
     const totalEl = document.getElementById("total");
     const updatedEl = document.getElementById("updated");
-    async function loadSales() {
-      try {
-        const response = await fetch("./sales.json?ts=" + Date.now(), { cache: "no-store" });
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        const sales = await response.json();
-        totalEl.textContent = new Intl.NumberFormat("de-AT").format(Number(sales.total) || 0);
-        updatedEl.textContent = sales.updatedAt
-          ? "Zuletzt aktualisiert: " + new Date(sales.updatedAt).toLocaleString("de-AT")
+    const loginButton = document.getElementById("login-button");
+    const sellButton = document.getElementById("sell-button");
+    const configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
+      !window.SUPABASE_URL.includes("DEIN-PROJEKT") &&
+      !window.SUPABASE_ANON_KEY.includes("DEIN-ANON-KEY");
+
+    if (!configured) {
+      loginButton.disabled = true;
+      loginStatus.textContent = "Datenbank noch nicht eingerichtet. Bitte zuerst config.js ausfüllen.";
+      loginStatus.classList.add("error");
+    } else {
+      const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+      async function loadSales() {
+        const { data, error } = await supabase.from("sales").select("total, updated_at").eq("id", 1).single();
+        if (error || !data) {
+          totalEl.textContent = "–";
+          updatedEl.textContent = "Verkaufszahl nicht verfügbar.";
+          updatedEl.classList.add("error");
+          return;
+        }
+        totalEl.textContent = new Intl.NumberFormat("de-AT").format(Number(data.total) || 0);
+        updatedEl.textContent = data.updated_at
+          ? "Zuletzt aktualisiert: " + new Date(data.updated_at).toLocaleString("de-AT")
           : "Noch keine Verkäufe registriert";
         updatedEl.classList.remove("error");
-      } catch {
-        totalEl.textContent = "–";
-        updatedEl.textContent = "Verkaufszahl gerade nicht verfügbar.";
-        updatedEl.classList.add("error");
       }
+      async function refreshSession() {
+        const { data: { session } } = await supabase.auth.getSession();
+        const signedIn = Boolean(session);
+        loginForm.hidden = signedIn;
+        panel.hidden = !signedIn;
+        if (signedIn) loadSales();
+      }
+      loginForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        loginButton.disabled = true;
+        loginStatus.textContent = "Anmeldung läuft …";
+        const { error } = await supabase.auth.signInWithPassword({
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value
+        });
+        loginButton.disabled = false;
+        if (error) {
+          loginStatus.textContent = "Anmeldung fehlgeschlagen. E-Mail und Passwort prüfen.";
+          loginStatus.classList.add("error");
+        } else {
+          loginStatus.textContent = "";
+          loginStatus.classList.remove("error");
+          await refreshSession();
+        }
+      });
+      sellButton.addEventListener("click", async () => {
+        sellButton.disabled = true;
+        saleStatus.textContent = "Verkaufszahl wird gespeichert …";
+        saleStatus.classList.remove("error");
+        const { error } = await supabase.rpc("increment_sales");
+        sellButton.disabled = false;
+        if (error) {
+          saleStatus.textContent = "Konnte nicht speichern. Bitte erneut anmelden oder Verbindung prüfen.";
+          saleStatus.classList.add("error");
+          return;
+        }
+        saleStatus.textContent = "Verkauf gespeichert!";
+        await loadSales();
+      });
+      document.getElementById("logout-button").addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        panel.hidden = true;
+        loginForm.hidden = false;
+        document.getElementById("password").value = "";
+        loginStatus.textContent = "Du wurdest abgemeldet.";
+      });
+      supabase.auth.onAuthStateChange(() => { refreshSession(); });
+      refreshSession();
+      setInterval(() => { if (!panel.hidden) loadSales(); }, 10000);
     }
-    loadSales();
-    setInterval(loadSales, 15000);
   </script>
 </body>
 </html>
