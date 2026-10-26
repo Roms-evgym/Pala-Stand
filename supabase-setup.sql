@@ -15,7 +15,7 @@ alter table public.sales_counters
   check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee', 'kaefer'));
 
 -- Falls der alte Käfer-Zähler existiert, übernehmen wir seinen Wert in Kaffee.
-do $
+do $$
 begin
   if exists (select 1 from public.sales_counters where id = 'kaefer') then
     if exists (select 1 from public.sales_counters where id = 'kaffee') then
@@ -31,7 +31,7 @@ begin
     end if;
   end if;
 end;
-$;
+$$;
 
 insert into public.sales_counters (id, label, total, updated_at) values
   ('marille', 'Marille', 0, null),
