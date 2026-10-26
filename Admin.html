@@ -45,7 +45,7 @@
       <div class="emoji" aria-hidden="true">🥞</div>
       <p class="eyebrow">Adminbereich</p>
       <h1>Verkaufszähler verwalten</h1>
-      <p>Für jede Sorte gibt es einen eigenen Zähler. Plus, Minus und Zurücksetzen wirken nur auf die ausgewählte Sorte.</p>
+      <p>Für jede Kategorie gibt es einen eigenen Zähler. Kaffee wird separat gezählt und nicht zur Gesamtzahl der Palatschinken addiert. Plus, Minus und Zurücksetzen wirken nur auf die ausgewählte Kategorie.</p>
     </header>
     <form id="login-form">
       <label class="field">Admin-E-Mail<input id="email" type="email" autocomplete="username" required></label>
@@ -54,7 +54,7 @@
       <p class="updated" id="login-status" role="status"></p>
     </form>
     <section id="admin-panel" hidden>
-      <div class="grand">Gesamtzahl über alle Kategorien<strong id="grand-total">…</strong></div>
+      <div class="grand">Palatschinken insgesamt (ohne Kaffee)<strong id="grand-total">…</strong></div>
       <section class="grid" aria-label="Zähler bearbeiten">
         <article class="item" data-counter="marille"><h2>Marille</h2><span class="count" id="count-marille">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Marille zurücksetzen</button></div></article>
         <article class="item" data-counter="erdbeere"><h2>Erdbeere</h2><span class="count" id="count-erdbeere">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Erdbeere zurücksetzen</button></div></article>
@@ -97,7 +97,7 @@
         }
         const values = Object.fromEntries(data.map(row => [row.id, Number(row.total) || 0]));
         ids.forEach(id => document.getElementById("count-" + id).textContent = fmt.format(values[id]));
-        document.getElementById("grand-total").textContent = fmt.format(ids.reduce((sum, id) => sum + values[id], 0));
+        document.getElementById("grand-total").textContent = fmt.format(ids.filter(id => id !== "kaffee").reduce((sum, id) => sum + values[id], 0));
         saleStatus.classList.remove("error");
       }
       async function refreshSession() {
