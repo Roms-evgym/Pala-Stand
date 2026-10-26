@@ -33,6 +33,30 @@
     .actions .reset { grid-column:1/-1; }
     .grand { margin-top:20px; padding:16px; text-align:center; border-radius:16px; background:#fff2d6; border:1px solid #f4dfb1; }
     .grand strong { display:block; font-size:2rem; color:var(--brown); }
+
+    .stats { margin-top:24px; }
+    .stats h2 { text-align:center; margin:0 0 6px; }
+    .stats-intro { text-align:center; color:var(--muted); font-size:.9rem; }
+    .chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)); gap:12px; margin-top:14px; }
+    .chart-card { min-width:0; padding:14px; border:1px solid var(--line); border-radius:16px; background:#fffdf9; }
+    .chart-card h3 { margin:0 0 12px; font-size:1rem; }
+    .pie-layout { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px; }
+    .pie { width:125px; height:125px; flex:0 0 auto; border-radius:50%; background:#f3e8d8; }
+    .legend { display:grid; gap:7px; font-size:.78rem; }
+    .legend-item { display:flex; align-items:center; gap:6px; }
+    .swatch { width:10px; height:10px; flex:0 0 auto; border-radius:3px; }
+    .bar-list { display:grid; gap:10px; }
+    .bar-row { display:grid; grid-template-columns:minmax(85px,1.2fr) minmax(30px,2fr) 28px; gap:6px; align-items:center; font-size:.75rem; }
+    .bar-track { height:14px; overflow:hidden; border-radius:5px; background:#f3e8d8; }
+    .bar-fill { height:100%; border-radius:5px; }
+    .bar-value { text-align:right; font-weight:800; font-variant-numeric:tabular-nums; }
+    .columns { height:180px; display:flex; align-items:stretch; gap:8px; padding:8px 2px 0; border-bottom:1px solid var(--line); }
+    .column-item { display:flex; min-width:0; flex:1; flex-direction:column; justify-content:flex-end; align-items:center; gap:5px; }
+    .column-value { font-size:.75rem; font-weight:800; }
+    .column-track { display:flex; width:100%; height:115px; align-items:flex-end; justify-content:center; }
+    .column-fill { width:min(100%,30px); min-height:0; border-radius:5px 5px 0 0; }
+    .column-label { min-height:3em; overflow-wrap:anywhere; text-align:center; font-size:.65rem; }
+    .chart-empty { padding:14px 0; color:var(--muted); text-align:center; font-size:.85rem; }
     .logout { display:block; margin:20px auto 0; background:none; border:0; color:var(--brown); text-decoration:underline; cursor:pointer; font:inherit; font-weight:750; }
     .hint { text-align:center; font-size:.86rem; }
     .back { display:block; text-align:center; margin-top:18px; color:var(--brown); font-weight:750; }
@@ -63,6 +87,17 @@
         <article class="item" data-counter="powidl"><h2>Papa (Zwetschke Mohn)</h2><span class="count" id="count-powidl">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Papa (Zwetschke Mohn) zurücksetzen</button></div></article>
         <article class="item" data-counter="kaffee"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Kaffee zurücksetzen</button></div></article>
       </section>
+
+      <section class="stats" aria-labelledby="stats-heading">
+        <h2 id="stats-heading">Verkaufsstatistiken</h2>
+        <p class="stats-intro">Alle Palatschinken-Sorten im Vergleich; Kaffee wird separat gezählt und nicht in die Diagramme aufgenommen.</p>
+        <div class="chart-grid">
+          <article class="chart-card"><h3>Kreisdiagramm · Anteile</h3><div class="pie-layout"><div class="pie" id="pie-chart" role="img" aria-label="Kreisdiagramm der Palatschinken-Verkäufe"></div><div class="legend" id="pie-legend"></div></div></article>
+          <article class="chart-card"><h3>Balkendiagramm · Vergleich</h3><div class="bar-list" id="bar-chart"></div></article>
+          <article class="chart-card"><h3>Säulendiagramm · Verkäufe</h3><div class="columns" id="column-chart"></div></article>
+        </div>
+        <p class="stats-intro" id="best-seller" aria-live="polite">Bestseller wird berechnet …</p>
+      </section>
       <p class="updated" id="sale-status" role="status"></p>
       <button class="logout" id="logout-button" type="button">Abmelden</button>
     </section>
@@ -88,6 +123,45 @@
       loginStatus.classList.add("error");
     } else {
       const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+      const flavors = [
+        { id: "marille", label: "Mama Pala (Marille)", color: "#d97706" },
+        { id: "erdbeere", label: "Lisa Pala (Erdbeer)", color: "#e05252" },
+        { id: "nutella", label: "Leon Pala (Nougat Nuss)", color: "#76513b" },
+        { id: "himbeere", label: "Sachertorten Pala", color: "#5b2b1b" },
+        { id: "powidl", label: "Papa (Zwetschke Mohn)", color: "#6554a4" }
+      ];
+      function renderStats(values) {
+        const total = flavors.reduce((sum, item) => sum + values[item.id], 0);
+        const pie = document.getElementById("pie-chart");
+        const legend = document.getElementById("pie-legend");
+        const bars = document.getElementById("bar-chart");
+        const columns = document.getElementById("column-chart");
+        const best = document.getElementById("best-seller");
+        if (total === 0) {
+          pie.style.background = "#f3e8d8";
+          legend.innerHTML = '<span class="chart-empty">Noch keine Verkäufe</span>';
+          bars.innerHTML = '<p class="chart-empty">Noch keine Verkäufe</p>';
+          columns.innerHTML = '<p class="chart-empty">Noch keine Verkäufe</p>';
+          best.textContent = "Noch keine Palatschinken-Verkäufe erfasst.";
+          return;
+        }
+        let angle = 0;
+        const slices = flavors.map(item => {
+          const start = angle;
+          angle += values[item.id] / total * 360;
+          return item.color + " " + start + "deg " + angle + "deg";
+        });
+        pie.style.background = "conic-gradient(" + slices.join(", ") + ")";
+        pie.setAttribute("aria-label", "Verkäufe: " + flavors.map(item => item.label + " " + values[item.id]).join(", "));
+        legend.innerHTML = flavors.map(item => '<div class="legend-item"><span class="swatch" style="background:' + item.color + '"></span><span>' + item.label + '</span><strong>' + fmt.format(values[item.id]) + ' · ' + (values[item.id] / total * 100).toLocaleString("de-AT", { maximumFractionDigits: 1 }) + '%</strong></div>').join("");
+        const max = Math.max(1, ...flavors.map(item => values[item.id]));
+        bars.innerHTML = [...flavors].sort((a,b) => values[b.id] - values[a.id]).map(item => '<div class="bar-row"><span>' + item.label + '</span><div class="bar-track"><div class="bar-fill" style="width:' + (values[item.id] / max * 100) + '%;background:' + item.color + '"></div></div><span class="bar-value">' + fmt.format(values[item.id]) + '</span></div>').join("");
+        columns.innerHTML = flavors.map(item => '<div class="column-item"><span class="column-value">' + fmt.format(values[item.id]) + '</span><div class="column-track"><div class="column-fill" style="height:' + (values[item.id] / max * 100) + '%;background:' + item.color + '"></div></div><span class="column-label">' + item.label + '</span></div>').join("");
+        const top = Math.max(...flavors.map(item => values[item.id]));
+        const leaders = flavors.filter(item => values[item.id] === top);
+        best.textContent = leaders.length === 1 ? "Bestseller: " + leaders[0].label + " mit " + fmt.format(top) + " Verkäufen." : "Gleichstand: " + leaders.map(item => item.label).join(", ") + " mit jeweils " + fmt.format(top) + " Verkäufen.";
+      }
       async function loadSales() {
         const { data, error } = await supabase.from("sales_counters").select("id,total,updated_at");
         if (error || !data || ids.some(id => !data.some(row => row.id === id))) {
@@ -98,6 +172,7 @@
         const values = Object.fromEntries(data.map(row => [row.id, Number(row.total) || 0]));
         ids.forEach(id => document.getElementById("count-" + id).textContent = fmt.format(values[id]));
         document.getElementById("grand-total").textContent = fmt.format(ids.filter(id => id !== "kaffee").reduce((sum, id) => sum + values[id], 0));
+        renderStats(values);
         saleStatus.classList.remove("error");
       }
       async function refreshSession() {
