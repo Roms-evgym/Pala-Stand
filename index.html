@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#7c3f18">
   <title>Palatschinken-Stand – Verkaufszähler</title>
   <style>
-    :root { color-scheme: light; --ink:#302218; --muted:#76685c; --cream:#fff8ed; --paper:#fffdf9; --brown:#7c3f18; --gold:#f2b544; --line:#ead9c5; }
+    :root { color-scheme:light; --ink:#302218; --muted:#76685c; --cream:#fff8ed; --paper:#fffdf9; --brown:#7c3f18; --line:#ead9c5; }
     * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; background:radial-gradient(ellipse at top, #fff0cc, var(--cream) 62%); color:var(--ink); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 62%); color:var(--ink); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
     main { width:min(100%,560px); text-align:center; background:var(--paper); border:1px solid var(--line); border-radius:28px; padding:clamp(24px,6vw,48px); box-shadow:0 18px 60px #633a1712; }
     .emoji { font-size:54px; line-height:1.2; }
     .eyebrow { margin:12px 0 8px; color:var(--brown); font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
@@ -34,29 +34,41 @@
       <span class="unit">Palatschinken verkauft</span>
       <p class="updated" id="updated">Verkaufszahl wird geladen …</p>
     </section>
-    <footer>Die Zahl wird im <a href="https://github.com/Roms-evgym/Pala-Stand/blob/main/sales.json">GitHub-Repo</a> gespeichert.</footer>
+    <footer>Öffentliche Verkaufsanzeige · Aktualisiert automatisch</footer>
   </main>
-  <script>
+  <script src="./config.js"></script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     const totalEl = document.getElementById("total");
     const updatedEl = document.getElementById("updated");
-    async function loadSales() {
-      try {
-        const response = await fetch("./sales.json?ts=" + Date.now(), { cache: "no-store" });
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        const sales = await response.json();
-        totalEl.textContent = new Intl.NumberFormat("de-AT").format(Number(sales.total) || 0);
-        updatedEl.textContent = sales.updatedAt
-          ? "Zuletzt aktualisiert: " + new Date(sales.updatedAt).toLocaleString("de-AT")
+    const configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
+      !window.SUPABASE_URL.includes("DEIN-PROJEKT") &&
+      !window.SUPABASE_ANON_KEY.includes("DEIN-ANON-KEY");
+    function showError(message) {
+      totalEl.textContent = "–";
+      updatedEl.textContent = message;
+      updatedEl.classList.add("error");
+    }
+    if (!configured) {
+      showError("Datenbank noch nicht eingerichtet.");
+    } else {
+      const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+      async function loadSales() {
+        const { data, error } = await supabase.from("sales").select("total, updated_at").eq("id", 1).single();
+        if (error || !data) {
+          showError("Verkaufszahl gerade nicht verfügbar.");
+          return;
+        }
+        totalEl.textContent = new Intl.NumberFormat("de-AT").format(Number(data.total) || 0);
+        updatedEl.textContent = data.updated_at
+          ? "Zuletzt aktualisiert: " + new Date(data.updated_at).toLocaleString("de-AT")
           : "Noch keine Verkäufe registriert";
         updatedEl.classList.remove("error");
-      } catch (error) {
-        totalEl.textContent = "–";
-        updatedEl.textContent = "Verkaufszahl gerade nicht verfügbar. Bitte später erneut versuchen.";
-        updatedEl.classList.add("error");
       }
+      loadSales();
+      setInterval(loadSales, 10000);
+      document.addEventListener("visibilitychange", () => { if (!document.hidden) loadSales(); });
     }
-    loadSales();
-    setInterval(loadSales, 30000);
   </script>
 </body>
 </html>
