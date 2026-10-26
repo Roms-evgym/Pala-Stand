@@ -61,7 +61,7 @@
         <article class="item" data-counter="nutella"><h2>Nutella</h2><span class="count" id="count-nutella">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Nutella zurücksetzen</button></div></article>
         <article class="item" data-counter="himbeere"><h2>Himbeere</h2><span class="count" id="count-himbeere">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Himbeere zurücksetzen</button></div></article>
         <article class="item" data-counter="powidl"><h2>Powidl</h2><span class="count" id="count-powidl">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Powidl zurücksetzen</button></div></article>
-        <article class="item" data-counter="kaefer"><h2>Käfer · eigene Kategorie</h2><span class="count" id="count-kaefer">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Käfer zurücksetzen</button></div></article>
+        <article class="item" data-counter="kaffee"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Kaffee zurücksetzen</button></div></article>
       </section>
       <p class="updated" id="sale-status" role="status"></p>
       <button class="logout" id="logout-button" type="button">Abmelden</button>
@@ -72,7 +72,7 @@
   <script src="./config.js"></script>
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaefer"];
+    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaffee"];
     const fmt = new Intl.NumberFormat("de-AT");
     const loginForm = document.getElementById("login-form");
     const loginStatus = document.getElementById("login-status");
