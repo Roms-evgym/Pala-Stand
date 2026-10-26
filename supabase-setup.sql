@@ -2,7 +2,7 @@
 -- Dieses Skript kann mehrfach ausgeführt werden. Bestehende Tabelle public.sales bleibt unverändert.
 
 create table if not exists public.sales_counters (
-  id text primary key check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaefer')),
+  id text primary key check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee')),
   label text not null,
   total bigint not null default 0 check (total >= 0),
   updated_at timestamptz
@@ -14,8 +14,14 @@ insert into public.sales_counters (id, label, total, updated_at) values
   ('nutella', 'Nutella', 0, null),
   ('himbeere', 'Himbeere', 0, null),
   ('powidl', 'Powidl', 0, null),
-  ('kaefer', 'Käfer · eigene Kategorie', 0, null)
+  ('kaffee', 'Kaffee', 0, null)
 on conflict (id) do nothing;
+
+-- Falls die frühere Kategorie "Käfer" bereits angelegt wurde, Daten sicher zu "Kaffee" migrieren.
+update public.sales_counters
+set id = 'kaffee', label = 'Kaffee'
+where id = 'kaefer'
+  and not exists (select 1 from public.sales_counters where id = 'kaffee');
 
 alter table public.sales_counters enable row level security;
 
