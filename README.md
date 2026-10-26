@@ -1,6 +1,6 @@
 # Palatschinken-Stand – Verkaufszähler
 
-Die öffentliche `index.html` zeigt die Gesamtzahl sowie getrennte Verkaufszahlen für Marille, Erdbeere, Nutella, Himbeere, Powidl und „Kaffee · eigene Kategorie“. Nur angemeldete Benutzer können Zähler auf `Admin.html` ändern.
+Die öffentliche `index.html` zeigt die Gesamtzahl der Palatschinken (Marille, Erdbeere, Nutella, Himbeere und Powidl) sowie getrennte Verkaufszahlen für alle fünf Sorten und „Kaffee · eigene Kategorie“. Kaffee wird separat gezählt und nicht zur Palatschinken-Gesamtzahl addiert. Nur angemeldete Benutzer können Zähler auf `Admin.html` ändern.
 
 ## Website veröffentlichen (GitHub Pages)
 
@@ -20,4 +20,4 @@ Die öffentliche `index.html` zeigt die Gesamtzahl sowie getrennte Verkaufszahle
 
 Die Zähler werden zentral in Supabase gespeichert. Die öffentliche Seite kann sie nur lesen und aktualisiert sich automatisch. GitHub Actions werden nicht verwendet.
 
-„Kaffee“ ist derzeit als eigene, separat gezählte Kategorie eingerichtet; die genaue Bedeutung kann später im Label geändert werden.
+„Kaffee“ ist eine eigene Kategorie. Der Kaffee-Zähler wird angezeigt und verwaltet, fließt aber nicht in die Gesamtzahl der Palatschinken ein.
