@@ -1,6 +1,6 @@
 # Palatschinken-Stand – Verkaufszähler
 
-Die öffentliche `index.html` zeigt die Gesamtzahl der Palatschinken (Marille, Erdbeere, Nutella, Himbeere und Powidl) sowie getrennte Verkaufszahlen für alle fünf Sorten und „Kaffee · eigene Kategorie“. Kaffee wird separat gezählt und nicht zur Palatschinken-Gesamtzahl addiert. Nur angemeldete Benutzer können Zähler auf `Admin.html` ändern.
+Die öffentliche `index.html` zeigt die Gesamtzahl der Palatschinken sowie die Verkaufszahlen für Mama Pala (Marille), Papa (Zwetschke Mohn), Leon Pala (Nougat Nuss), Lisa Pala (Erdbeer) und Sachertorten Pala. Zusätzlich gibt es „Kaffee · eigene Kategorie“. Kaffee wird separat gezählt und nicht zur Palatschinken-Gesamtzahl addiert. Nur angemeldete Benutzer können Zähler auf `Admin.html` ändern.
 
 ## Website veröffentlichen (GitHub Pages)
 
