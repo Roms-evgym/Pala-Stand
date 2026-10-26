@@ -1,0 +1,43 @@
+name: Palatschinke verkaufen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: palatschinken-sales-counter
+  cancel-in-progress: false
+
+jobs:
+  register-sale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Verkauf zählen
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          path = Path("sales.json")
+          data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+          data["total"] = int(data.get("total", 0)) + 1
+          data["updatedAt"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print(f'Palatschinken insgesamt verkauft: {data["total"]}')
+          PY
+
+      - name: Verkaufszahl speichern
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sales.json
+          git commit -m "Verkauf einer Palatschinke zählen"
+          git push
