@@ -64,11 +64,11 @@
       <span class="grand-label">Palatschinken insgesamt (ohne Kaffee)</span>
     </section>
     <section class="grid" id="counter-grid" aria-label="Verkaufszahlen nach Sorte">
-      <article class="item"><h2>Marille</h2><span class="count" id="count-marille">…</span></article>
-      <article class="item"><h2>Erdbeere</h2><span class="count" id="count-erdbeere">…</span></article>
-      <article class="item"><h2>Nutella</h2><span class="count" id="count-nutella">…</span></article>
-      <article class="item"><h2>Himbeere</h2><span class="count" id="count-himbeere">…</span></article>
-      <article class="item"><h2>Powidl</h2><span class="count" id="count-powidl">…</span></article>
+      <article class="item"><h2>Mama Pala (Marille)</h2><span class="count" id="count-marille">…</span></article>
+      <article class="item"><h2>Lisa Pala (Erdbeer)</h2><span class="count" id="count-erdbeere">…</span></article>
+      <article class="item"><h2>Leon Pala (Nougat Nuss)</h2><span class="count" id="count-nutella">…</span></article>
+      <article class="item"><h2>Sachertorten Pala</h2><span class="count" id="count-himbeere">…</span></article>
+      <article class="item"><h2>Papa (Zwetschke Mohn)</h2><span class="count" id="count-powidl">…</span></article>
       <article class="item"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span></article>
     </section>
     <section class="stats" aria-labelledby="stats-heading">
@@ -99,11 +99,11 @@
     const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaffee"];
     const fmt = new Intl.NumberFormat("de-AT");
     const flavors = [
-      { id: "marille", label: "Marille", color: "#d97706" },
-      { id: "erdbeere", label: "Erdbeere", color: "#e05252" },
-      { id: "nutella", label: "Nutella", color: "#76513b" },
-      { id: "himbeere", label: "Himbeere", color: "#bd4f91" },
-      { id: "powidl", label: "Powidl", color: "#6554a4" }
+      { id: "marille", label: "Mama Pala (Marille)", color: "#d97706" },
+      { id: "erdbeere", label: "Lisa Pala (Erdbeer)", color: "#e05252" },
+      { id: "nutella", label: "Leon Pala (Nougat Nuss)", color: "#76513b" },
+      { id: "himbeere", label: "Sachertorten Pala", color: "#bd4f91" },
+      { id: "powidl", label: "Papa (Zwetschke Mohn)", color: "#6554a4" }
     ];
     const updatedEl = document.getElementById("updated");
     const grandEl = document.getElementById("grand-total");
