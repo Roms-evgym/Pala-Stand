@@ -10,6 +10,9 @@
     :root { color-scheme:light; --ink:#302218; --muted:#76685c; --cream:#fff8ed; --paper:#fffdf9; --brown:#7c3f18; --line:#ead9c5; }
     * { box-sizing:border-box; }
     body { margin:0; min-height:100vh; padding:24px; color:var(--ink); background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 65%); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .topbar { width:min(100%,920px); margin:0 auto 12px; display:flex; justify-content:flex-end; }
+    .admin-link { display:inline-flex; align-items:center; gap:7px; padding:10px 15px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--brown); font-weight:800; text-decoration:none; box-shadow:0 3px 12px #633a1710; }
+    .admin-link:hover { background:#fff2d6; }
     main { width:min(100%,920px); margin:0 auto; }
     .hero { overflow:hidden; position:relative; padding:clamp(30px,7vw,68px) 24px; text-align:center; background:var(--paper); border:1px solid var(--line); border-radius:30px; box-shadow:0 18px 60px #633a1712; }
     .emoji { font-size:clamp(3rem,9vw,5rem); }
