@@ -29,6 +29,12 @@
     .coffee { margin:18px 0 0; padding:15px; border-radius:14px; background:#f5ece2; text-align:center; color:var(--muted); }
     .counter-link { display:block; width:fit-content; max-width:100%; margin:24px auto 0; padding:14px 20px; border:2px solid var(--brown); border-radius:14px; color:var(--brown); text-align:center; font-weight:850; text-decoration:none; }
     .counter-link:hover { background:#fff2d6; }
+    .press-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+    .press-photo { margin:0; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#fffaf2; }
+    .press-photo img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
+    .press-photo figcaption { padding:10px 12px; color:var(--muted); font-size:.85rem; }
+    .article-link { display:block; width:fit-content; max-width:100%; margin:22px auto 0; padding:14px 20px; border-radius:14px; background:var(--brown); color:#fff; text-align:center; font-weight:850; text-decoration:none; }
+    .credit { margin:14px 0 0; color:var(--muted); font-size:.78rem; text-align:center; }
     footer { padding:25px 10px 8px; color:var(--muted); text-align:center; font-size:.88rem; }
     @media (max-width:520px) { body { padding:12px; } .hero { border-radius:22px; } .section { border-radius:18px; } }
   </style>
@@ -54,6 +60,26 @@
       </div>
       <p class="coffee">☕ Kaffee gibt es bei uns auch – er wird in den Verkaufszahlen separat gezählt.</p>
       <a class="counter-link" href="./Z%C3%A4hler.html">Alle Verkaufszahlen &amp; Diagramme ansehen →</a>
+    </section>
+    <section class="section" aria-labelledby="zeitung-title">
+      <h2 id="zeitung-title">Wir in der Zeitung 📰</h2>
+      <p class="sub">MeinBezirk.at hat über unsere süße Tradition und das Engagement für den Samariterbund berichtet.</p>
+      <div class="press-grid">
+        <figure class="press-photo">
+          <img src="https://media04.meinbezirk.at/article/2023/10/27/6/36965156_L.jpg?1698413308=" alt="Lisa beim Zubereiten einer Palatschinke" loading="lazy">
+          <figcaption>Mit viel Freude wird frisch gebacken.</figcaption>
+        </figure>
+        <figure class="press-photo">
+          <img src="https://media04.meinbezirk.at/article/2023/10/27/5/36965165_L.jpg?1698412227=" alt="Aufsteller mit den Palatschinken-Füllungen" loading="lazy">
+          <figcaption>Unsere verschiedenen Palatschinken-Füllungen.</figcaption>
+        </figure>
+        <figure class="press-photo">
+          <img src="https://media04.meinbezirk.at/article/2023/10/27/3/36965273_L.jpg?1698412410=" alt="Stoffhund als Symbol der Unterstützung des Samariterbundes" loading="lazy">
+          <figcaption>Die besondere Verbindung zum Samariterbund.</figcaption>
+        </figure>
+      </div>
+      <a class="article-link" href="https://www.meinbezirk.at/schwechat/c-lokales/eine-suesse-tradition-fuer-den-samariterbund_a6345902" target="_blank" rel="noopener noreferrer">Den ganzen Zeitungsartikel lesen →</a>
+      <p class="credit">Fotos: cinemotion – Ivanek · veröffentlicht auf MeinBezirk.at · <a href="https://www.meinbezirk.at/schwechat/c-lokales/eine-suesse-tradition-fuer-den-samariterbund_a6345902" target="_blank" rel="noopener noreferrer">Originalartikel</a></p>
     </section>
     <footer>🥞 Lisa's &amp; Leon's Pala Stand · Danke für euren Besuch und eure Unterstützung!</footer>
   </main>
