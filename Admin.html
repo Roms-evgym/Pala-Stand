@@ -57,6 +57,10 @@
     .column-fill { width:min(100%,30px); min-height:0; border-radius:5px 5px 0 0; }
     .column-label { min-height:3em; overflow-wrap:anywhere; text-align:center; font-size:.65rem; }
     .chart-empty { padding:14px 0; color:var(--muted); text-align:center; font-size:.85rem; }
+    .contest-admin { margin-top:24px; padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffaf2; }
+    .contest-admin .button { margin:8px 0; }
+    .entry-list { display:grid; gap:8px; margin-top:12px; }
+    .entry-row { padding:10px; border:1px solid var(--line); border-radius:10px; background:#fff; font-size:.88rem; }
     .logout { display:block; margin:20px auto 0; background:none; border:0; color:var(--brown); text-decoration:underline; cursor:pointer; font:inherit; font-weight:750; }
     .hint { text-align:center; font-size:.86rem; }
     .back { display:block; text-align:center; margin-top:18px; color:var(--brown); font-weight:750; }
@@ -88,6 +92,14 @@
         <article class="item" data-counter="kaffee"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Kaffee zurücksetzen</button></div></article>
       </section>
 
+      <section class="contest-admin">
+        <h2>🥞 Gewinnspiel verwalten</h2>
+        <p id="contest-admin-status" class="updated">Status wird geladen …</p>
+        <button class="button" id="contest-start" type="button">Gewinnspiel starten</button>
+        <button class="button danger" id="contest-stop" type="button">Gewinnspiel stoppen &amp; Gewinner ermitteln</button>
+        <h3>Alle Teilnahmen (nur Admin)</h3>
+        <div class="entry-list" id="contest-entries"></div>
+      </section>
       <section class="stats" aria-labelledby="stats-heading">
         <h2 id="stats-heading">Verkaufsstatistiken</h2>
         <p class="stats-intro">Alle Palatschinken-Sorten im Vergleich; Kaffee wird separat gezählt und nicht in die Diagramme aufgenommen.</p>
@@ -175,12 +187,23 @@
         renderStats(values);
         saleStatus.classList.remove("error");
       }
+      const contestStatus=document.getElementById("contest-admin-status"),contestEntries=document.getElementById("contest-entries"),startContest=document.getElementById("contest-start"),stopContest=document.getElementById("contest-stop");
+      const safe=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+      async function loadContestAdmin(){
+        const [{data:s,error:e1},{data:entries,error:e2}]=await Promise.all([supabase.from("pala_contest").select("active,final_total").eq("id",true).maybeSingle(),supabase.from("pala_contest_entries").select("id,name,guess,pancake_name,ingredients,is_winner").order("id")]);
+        if(e1||e2){contestStatus.textContent="Gewinnspiel-SQL noch nicht ausgeführt oder Zugriff fehlt.";return;}
+        contestStatus.textContent=s.active?"Status: LÄUFT – Tipps werden angenommen.":"Status: GESTOPPT"+(s.final_total===null?"":" · Endstand: "+s.final_total);
+        startContest.disabled=!!s.active;stopContest.disabled=!s.active;
+        contestEntries.innerHTML=entries?.length?entries.map(x=>'<article class="entry-row">'+(x.is_winner?'🏆 <strong>GEWINNER</strong> · ':'')+'<strong>'+safe(x.name)+'</strong> · Tipp: '+x.guess+'<br><strong>'+safe(x.pancake_name)+'</strong> – '+safe(x.ingredients)+'</article>').join(""):"<p>Noch keine Teilnahmen.</p>";
+      }
+      startContest.addEventListener("click",async()=>{if(!confirm("Neues Gewinnspiel starten? Alte Teilnahmen werden gelöscht."))return;startContest.disabled=true;const {error}=await supabase.rpc("start_pala_contest");contestStatus.textContent=error?"Fehler: "+error.message:"Gewinnspiel gestartet.";await loadContestAdmin();});
+      stopContest.addEventListener("click",async()=>{if(!confirm("Gewinnspiel stoppen und Gewinner anhand der aktuellen Verkaufszahl ermitteln?"))return;stopContest.disabled=true;const {data,error}=await supabase.rpc("stop_pala_contest");contestStatus.textContent=error?"Fehler: "+error.message:"Gewinnspiel gestoppt. Endstand: "+data;await loadContestAdmin();});
       async function refreshSession() {
         const { data: { session } } = await supabase.auth.getSession();
         const signedIn = Boolean(session);
         loginForm.hidden = signedIn;
         panel.hidden = !signedIn;
-        if (signedIn) await loadSales();
+        if (signedIn) { await loadSales(); await loadContestAdmin(); }
       }
       loginForm.addEventListener("submit", async event => {
         event.preventDefault();
@@ -231,7 +254,7 @@
       });
       supabase.auth.onAuthStateChange(() => { refreshSession(); });
       refreshSession();
-      setInterval(() => { if (!panel.hidden) loadSales(); }, 10000);
+      setInterval(() => { if (!panel.hidden) { loadSales(); loadContestAdmin(); } }, 10000);
     }
   </script>
 </body>
