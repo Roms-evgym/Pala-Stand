@@ -4,177 +4,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#7c3f18">
-  <title>Palatschinken-Stand – Verkaufszähler</title>
+  <meta name="description" content="Willkommen bei Lisa's und Leon's Pala Stand – entdecke unsere Palatschinken und die aktuellen Verkaufszahlen.">
+  <title>Lisa's &amp; Leon's Pala Stand</title>
   <style>
     :root { color-scheme:light; --ink:#302218; --muted:#76685c; --cream:#fff8ed; --paper:#fffdf9; --brown:#7c3f18; --line:#ead9c5; }
     * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:22px; background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 62%); color:var(--ink); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    main { width:min(100%,760px); background:var(--paper); border:1px solid var(--line); border-radius:28px; padding:clamp(22px,5vw,42px); box-shadow:0 18px 60px #633a1712; }
-    header { text-align:center; }
-    .emoji { font-size:52px; line-height:1.2; }
-    .eyebrow { margin:12px 0 8px; color:var(--brown); font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
-    h1 { margin:0; text-align:center; font-size:clamp(2rem,7vw,3rem); letter-spacing:-.04em; }
-    .intro { text-align:center; color:var(--muted); line-height:1.6; margin:12px auto 26px; max-width:42ch; }
-    .grand { text-align:center; border-radius:18px; background:#fff2d6; padding:18px; border:1px solid #f4dfb1; margin-bottom:18px; }
-    .grand-number { display:block; font-size:clamp(3rem,12vw,4.5rem); line-height:1; font-weight:900; letter-spacing:-.05em; color:var(--brown); font-variant-numeric:tabular-nums; }
-    .grand-label { display:block; margin-top:8px; font-weight:800; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr)); gap:12px; }
-    .item { border:1px solid var(--line); border-radius:16px; padding:18px 12px; text-align:center; background:#fffdf9; }
-    .item h2 { font-size:1rem; margin:0 0 10px; }
-    .count { display:block; color:var(--brown); font-size:2.7rem; font-weight:900; line-height:1.1; font-variant-numeric:tabular-nums; }
-    .stats { margin-top:28px; }
-    .stats > h2 { text-align:center; font-size:1.5rem; margin:0 0 6px; }
-    .stats-intro { text-align:center; color:var(--muted); font-size:.9rem; margin:0 0 16px; }
-    .chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:14px; }
-    .chart-card { border:1px solid var(--line); border-radius:18px; padding:16px; background:#fffdf9; min-width:0; }
-    .chart-card h3 { margin:0 0 14px; font-size:1.05rem; }
-    .pie-layout { display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; }
-    .pie { width:150px; height:150px; border-radius:50%; background:#eee; flex:0 0 auto; }
-    .legend { display:grid; gap:8px; font-size:.85rem; }
-    .legend-item { display:flex; align-items:center; gap:7px; }
-    .swatch { width:11px; height:11px; border-radius:3px; flex:0 0 auto; }
-    .bar-list { display:grid; gap:12px; }
-    .bar-row { display:grid; grid-template-columns:76px minmax(30px,1fr) 35px; gap:8px; align-items:center; font-size:.83rem; }
-    .bar-track { height:16px; background:#f3e8d8; border-radius:5px; overflow:hidden; }
-    .bar-fill { height:100%; border-radius:5px; min-width:0; }
-    .bar-value { text-align:right; font-weight:800; font-variant-numeric:tabular-nums; }
-    .columns { height:190px; display:flex; align-items:stretch; gap:10px; padding:8px 2px 0; border-bottom:1px solid var(--line); }
-    .column-item { flex:1; min-width:0; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; }
-    .column-value { font-size:.78rem; font-weight:800; font-variant-numeric:tabular-nums; }
-    .column-track { height:125px; width:100%; display:flex; align-items:flex-end; justify-content:center; }
-    .column-fill { width:min(100%,34px); border-radius:6px 6px 0 0; min-height:0; }
-    .column-label { min-height:2.4em; text-align:center; font-size:.72rem; overflow-wrap:anywhere; }
-    .chart-empty { color:var(--muted); text-align:center; font-size:.9rem; padding:20px 0; }
-    .updated { min-height:1.4em; margin:14px 0 0; text-align:center; font-size:.84rem; color:var(--muted); }
-    .error { color:#9e2828; }
-    footer { margin-top:24px; text-align:center; font-size:.8rem; color:var(--muted); }
-    footer a { color:inherit; }
+    body { margin:0; min-height:100vh; padding:24px; color:var(--ink); background:radial-gradient(ellipse at top,#fff0cc,var(--cream) 65%); font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(100%,920px); margin:0 auto; }
+    .hero { overflow:hidden; position:relative; padding:clamp(30px,7vw,68px) 24px; text-align:center; background:var(--paper); border:1px solid var(--line); border-radius:30px; box-shadow:0 18px 60px #633a1712; }
+    .emoji { font-size:clamp(3rem,9vw,5rem); }
+    .eyebrow { margin:14px 0 8px; color:var(--brown); font-size:.78rem; font-weight:850; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { margin:0; font-size:clamp(2.2rem,8vw,4.5rem); line-height:1.04; letter-spacing:-.055em; }
+    .intro { max-width:620px; margin:18px auto 0; color:var(--muted); font-size:clamp(1rem,2.5vw,1.2rem); line-height:1.65; }
+    .cta { display:inline-flex; align-items:center; justify-content:center; gap:10px; margin-top:28px; padding:15px 23px; border-radius:14px; background:var(--brown); color:white; font-weight:850; text-decoration:none; box-shadow:0 4px 0 #54270d; }
+    .cta:hover { filter:brightness(1.08); transform:translateY(-1px); }
+    .section { margin-top:24px; padding:clamp(22px,4vw,34px); background:var(--paper); border:1px solid var(--line); border-radius:24px; }
+    h2 { margin:0 0 8px; text-align:center; font-size:clamp(1.4rem,4vw,2rem); }
+    .sub { margin:0 auto 22px; color:var(--muted); text-align:center; line-height:1.55; }
+    .flavors { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .flavor { padding:17px; border:1px solid var(--line); border-radius:16px; background:#fffaf2; text-align:center; }
+    .flavor .icon { font-size:2rem; }
+    .flavor h3 { margin:7px 0 3px; font-size:1.05rem; }
+    .flavor p { margin:0; color:var(--muted); font-size:.9rem; }
+    .coffee { margin:18px 0 0; padding:15px; border-radius:14px; background:#f5ece2; text-align:center; color:var(--muted); }
+    .counter-link { display:block; width:fit-content; max-width:100%; margin:24px auto 0; padding:14px 20px; border:2px solid var(--brown); border-radius:14px; color:var(--brown); text-align:center; font-weight:850; text-decoration:none; }
+    .counter-link:hover { background:#fff2d6; }
+    footer { padding:25px 10px 8px; color:var(--muted); text-align:center; font-size:.88rem; }
+    @media (max-width:520px) { body { padding:12px; } .hero { border-radius:22px; } .section { border-radius:18px; } }
   </style>
 </head>
 <body>
   <main>
-    <header>
+    <header class="hero">
       <div class="emoji" aria-hidden="true">🥞</div>
       <p class="eyebrow">Frisch aus der Pfanne</p>
-      <h1>Palatschinken-Stand</h1>
-      <p class="intro">Hier seht ihr gemeinsam die aktuellen Verkaufszahlen für jede Sorte.</p>
+      <h1>Lisa's &amp; Leon's<br>Pala Stand</h1>
+      <p class="intro">Willkommen bei unserem Palatschinken-Stand! Entdecke unsere verschiedenen Pala-Kreationen und schau dir an, welche Sorten besonders beliebt sind.</p>
+      <a class="cta" href="./Z%C3%A4hler.html">📊 Zu den aktuellen Verkaufszahlen</a>
     </header>
-    <section class="grand" aria-live="polite">
-      <span class="grand-number" id="grand-total">…</span>
-      <span class="grand-label">Palatschinken insgesamt (ohne Kaffee)</span>
-    </section>
-    <section class="grid" id="counter-grid" aria-label="Verkaufszahlen nach Sorte">
-      <article class="item"><h2>Mama Pala (Marille)</h2><span class="count" id="count-marille">…</span></article>
-      <article class="item"><h2>Lisa Pala (Erdbeer)</h2><span class="count" id="count-erdbeere">…</span></article>
-      <article class="item"><h2>Leon Pala (Nougat Nuss)</h2><span class="count" id="count-nutella">…</span></article>
-      <article class="item"><h2>Sachertorten Pala</h2><span class="count" id="count-himbeere">…</span></article>
-      <article class="item"><h2>Papa Pala(Zwetschke Mohn)</h2><span class="count" id="count-powidl">…</span></article>
-      <article class="item"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span></article>
-    </section>
-    <section class="stats" aria-labelledby="stats-heading">
-      <h2 id="stats-heading">Verkaufsstatistik</h2>
-      <p class="stats-intro">Welche Palatschinken-Sorte wird am häufigsten verkauft? Kaffee wird separat gezählt und ist hier nicht enthalten.</p>
-      <div class="chart-grid">
-        <article class="chart-card">
-          <h3>Kreisdiagramm · Anteile</h3>
-          <div class="pie-layout"><div class="pie" id="pie-chart" role="img" aria-label="Kreisdiagramm der Verkäufe nach Sorte"></div><div class="legend" id="pie-legend"></div></div>
-        </article>
-        <article class="chart-card">
-          <h3>Balkendiagramm · Vergleich</h3>
-          <div class="bar-list" id="bar-chart"></div>
-        </article>
-        <article class="chart-card">
-          <h3>Säulendiagramm · Verkäufe</h3>
-          <div class="columns" id="column-chart"></div>
-        </article>
+    <section class="section">
+      <h2>Unsere Palatschinken</h2>
+      <p class="sub">Fünf verschiedene Sorten – welche ist dein Favorit?</p>
+      <div class="flavors">
+        <article class="flavor"><div class="icon" aria-hidden="true">🍑</div><h3>Mama Pala</h3><p>Marille</p></article>
+        <article class="flavor"><div class="icon" aria-hidden="true">🫐</div><h3>Papa</h3><p>Zwetschke Mohn</p></article>
+        <article class="flavor"><div class="icon" aria-hidden="true">🍫</div><h3>Leon Pala</h3><p>Nougat Nuss</p></article>
+        <article class="flavor"><div class="icon" aria-hidden="true">🍓</div><h3>Lisa Pala</h3><p>Erdbeer</p></article>
+        <article class="flavor"><div class="icon" aria-hidden="true">🍰</div><h3>Sachertorten Pala</h3><p>Schokoladiger Genuss</p></article>
       </div>
-      <p class="stats-intro" id="best-seller" aria-live="polite">Bestseller wird berechnet …</p>
+      <p class="coffee">☕ Kaffee gibt es bei uns auch – er wird in den Verkaufszahlen separat gezählt.</p>
+      <a class="counter-link" href="./Z%C3%A4hler.html">Alle Verkaufszahlen &amp; Diagramme ansehen →</a>
     </section>
-    <p class="updated" id="updated" role="status">Verkaufszahlen werden geladen …</p>
-    <footer>Öffentliche Verkaufsanzeige · Aktualisiert automatisch</footer>
+    <footer>🥞 Lisa's &amp; Leon's Pala Stand · Danke für euren Besuch und eure Unterstützung!</footer>
   </main>
-  <script src="./config.js"></script>
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaffee"];
-    const fmt = new Intl.NumberFormat("de-AT");
-    const flavors = [
-      { id: "marille", label: "Mama Pala (Marille)", color: "#d97706" },
-      { id: "erdbeere", label: "Lisa Pala (Erdbeer)", color: "#e05252" },
-      { id: "nutella", label: "Leon Pala (Nougat Nuss)", color: "#76513b" },
-      { id: "himbeere", label: "Sachertorten Pala", color: "#bd4f91" },
-      { id: "powidl", label: "Papa (Zwetschke Mohn)", color: "#6554a4" }
-    ];
-    const updatedEl = document.getElementById("updated");
-    const grandEl = document.getElementById("grand-total");
-    const configured = window.SUPABASE_URL && window.SUPABASE_ANON_KEY &&
-      !window.SUPABASE_URL.includes("DEIN-PROJEKT") &&
-      !window.SUPABASE_ANON_KEY.includes("DEIN-ANON-KEY");
-    function renderStats(values) {
-      const total = flavors.reduce((sum, item) => sum + values[item.id], 0);
-      const legend = document.getElementById("pie-legend");
-      const pie = document.getElementById("pie-chart");
-      const bars = document.getElementById("bar-chart");
-      const columns = document.getElementById("column-chart");
-      const best = document.getElementById("best-seller");
-      if (total === 0) {
-        pie.style.background = "#f3e8d8";
-        legend.innerHTML = '<span class="chart-empty">Noch keine Verkäufe</span>';
-        bars.innerHTML = '<p class="chart-empty">Sobald Verkäufe erfasst sind, erscheint hier der Vergleich.</p>';
-        columns.innerHTML = '<p class="chart-empty">Noch keine Verkäufe</p>';
-        best.textContent = "Noch keine Palatschinken-Verkäufe erfasst.";
-        return;
-      }
-      let angle = 0;
-      const slices = flavors.map(item => {
-        const start = angle;
-        angle += values[item.id] / total * 360;
-        return item.color + " " + start + "deg " + angle + "deg";
-      });
-      pie.style.background = "conic-gradient(" + slices.join(", ") + ")";
-      pie.setAttribute("aria-label", "Kreisdiagramm: " + flavors.map(item => item.label + " " + values[item.id]).join(", "));
-      legend.innerHTML = flavors.map(item =>
-        '<div class="legend-item"><span class="swatch" style="background:' + item.color + '"></span><span>' + item.label + '</span><strong>' + fmt.format(values[item.id]) + ' · ' + (values[item.id] / total * 100).toLocaleString("de-AT", { maximumFractionDigits: 1 }) + '%</strong></div>'
-      ).join("");
-      const max = Math.max(1, ...flavors.map(item => values[item.id]));
-      bars.innerHTML = [...flavors].sort((a,b) => values[b.id] - values[a.id]).map(item =>
-        '<div class="bar-row"><span>' + item.label + '</span><div class="bar-track"><div class="bar-fill" style="width:' + (values[item.id] / max * 100) + '%;background:' + item.color + '"></div></div><span class="bar-value">' + fmt.format(values[item.id]) + '</span></div>'
-      ).join("");
-      columns.innerHTML = flavors.map(item =>
-        '<div class="column-item"><span class="column-value">' + fmt.format(values[item.id]) + '</span><div class="column-track"><div class="column-fill" style="height:' + (values[item.id] / max * 100) + '%;background:' + item.color + '"></div></div><span class="column-label">' + item.label + '</span></div>'
-      ).join("");
-      const top = Math.max(...flavors.map(item => values[item.id]));
-      const leaders = flavors.filter(item => values[item.id] === top);
-      best.textContent = leaders.length === 1
-        ? "Bestseller: " + leaders[0].label + " mit " + fmt.format(top) + " Verkäufen."
-        : "Gleichstand: " + leaders.map(item => item.label).join(", ") + " mit jeweils " + fmt.format(top) + " Verkäufen.";
-    }
-    function showError() {
-      grandEl.textContent = "–";
-      ids.forEach(id => document.getElementById("count-" + id).textContent = "–");
-      updatedEl.textContent = "Verkaufszahlen gerade nicht verfügbar. Bitte später erneut versuchen.";
-      updatedEl.classList.add("error");
-    }
-    if (!configured) {
-      showError();
-    } else {
-      const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      async function loadSales() {
-        const { data, error } = await supabase.from("sales_counters").select("id,total,updated_at");
-        if (error || !data) { showError(); return; }
-        const values = Object.fromEntries(data.map(row => [row.id, Number(row.total) || 0]));
-        if (ids.some(id => values[id] === undefined)) { showError(); return; }
-        ids.forEach(id => document.getElementById("count-" + id).textContent = fmt.format(values[id]));
-        grandEl.textContent = fmt.format(ids.filter(id => id !== "kaffee").reduce((sum, id) => sum + values[id], 0));
-        renderStats(values);
-        const latest = data.map(row => row.updated_at).filter(Boolean).sort().at(-1);
-        updatedEl.textContent = latest ? "Zuletzt aktualisiert: " + new Date(latest).toLocaleString("de-AT") : "Noch keine Verkäufe registriert";
-        updatedEl.classList.remove("error");
-      }
-      loadSales();
-      setInterval(loadSales, 10000);
-      document.addEventListener("visibilitychange", () => { if (!document.hidden) loadSales(); });
-    }
-  </script>
 </body>
 </html>
