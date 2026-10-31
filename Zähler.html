@@ -184,7 +184,7 @@
       async function loadWinners() {
         const [{ data: contest }, { data: winners, error }] = await Promise.all([
           supabase.from("pala_contest").select("active,final_total").eq("id", true).maybeSingle(),
-          supabase.from("pala_contest_entries").select("name,pancake_name,ingredients").eq("is_winner", true).order("id")
+          supabase.from("pala_contest_winners").select("name,pancake_name,ingredients").order("id")
         ]);
         if (!contest || contest.active || contest.final_total === null || error || !winners?.length) {
           winnersSection.hidden = true;
