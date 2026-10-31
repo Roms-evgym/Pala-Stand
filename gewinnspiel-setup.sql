@@ -29,7 +29,7 @@ declare actual bigint;
 begin
  if auth.uid() is null then raise exception 'Admin-Anmeldung erforderlich'; end if;
  select coalesce(sum(total),0) into actual from public.sales_counters where id in ('marille','erdbeere','nutella','himbeere','powidl');
- update public.pala_contest_entries set is_winner=false;
+ update public.pala_contest_entries set is_winner=false where true;
  if exists(select 1 from public.pala_contest_entries) then
   update public.pala_contest_entries set is_winner=true where abs(guess::bigint-actual)=(select min(abs(guess::bigint-actual)) from public.pala_contest_entries);
  end if;
