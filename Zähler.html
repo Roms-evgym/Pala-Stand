@@ -49,6 +49,14 @@
     .error { color:#9e2828; }
     .back-link { display:inline-flex; align-items:center; gap:8px; margin-bottom:20px; padding:10px 15px; border:1px solid var(--line); border-radius:999px; color:var(--brown); background:#fff8ed; text-decoration:none; font-weight:800; transition:background .2s,transform .2s; }
     .back-link:hover { background:#fff0d5; transform:translateY(-1px); }
+    .winners { margin-top:24px; padding:20px; border:1px solid #efd8a5; border-radius:18px; background:#fff7e5; }
+    .winners h2 { margin:0 0 8px; text-align:center; font-size:1.35rem; }
+    .winners-intro { margin:0 0 14px; text-align:center; color:var(--muted); font-size:.9rem; }
+    .winner-list { display:grid; gap:12px; }
+    .winner-card { padding:15px; border:1px solid #efd8a5; border-radius:14px; background:#fffdf8; text-align:center; }
+    .winner-card h3 { margin:0 0 6px; color:var(--brown); }
+    .winner-card p { margin:5px 0; }
+    .winner-empty { text-align:center; color:var(--muted); margin:0; }
     footer { margin-top:24px; text-align:center; font-size:.8rem; color:var(--muted); }
     footer a { color:inherit; }
   </style>
@@ -73,6 +81,11 @@
       <article class="item"><h2>Sachertorten Pala</h2><span class="count" id="count-himbeere">…</span></article>
       <article class="item"><h2>Papa Pala(Zwetschke Mohn)</h2><span class="count" id="count-powidl">…</span></article>
       <article class="item"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span></article>
+    </section>
+    <section class="winners" id="contest-winners" hidden aria-live="polite">
+      <h2>🏆 Gewinnspiel-Gewinner</h2>
+      <p class="winners-intro" id="winner-intro">Die Gewinner-Palatschinken</p>
+      <div class="winner-list" id="winner-list"></div>
     </section>
     <section class="stats" aria-labelledby="stats-heading">
       <h2 id="stats-heading">Verkaufsstatistik</h2>
@@ -162,6 +175,25 @@
       showError();
     } else {
       const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+      const winnersSection = document.getElementById("contest-winners");
+      const winnerList = document.getElementById("winner-list");
+      const winnerIntro = document.getElementById("winner-intro");
+      function safeText(value) {
+        return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+      }
+      async function loadWinners() {
+        const [{ data: contest }, { data: winners, error }] = await Promise.all([
+          supabase.from("pala_contest").select("active,final_total").eq("id", true).maybeSingle(),
+          supabase.from("pala_contest_entries").select("name,pancake_name,ingredients").eq("is_winner", true).order("id")
+        ]);
+        if (!contest || contest.active || contest.final_total === null || error || !winners?.length) {
+          winnersSection.hidden = true;
+          return;
+        }
+        winnerIntro.textContent = "Endstand: " + fmt.format(contest.final_total) + " verkaufte Palatschinken";
+        winnerList.innerHTML = winners.map(w => '<article class="winner-card"><h3>🥞 ' + safeText(w.pancake_name) + '</h3><p><strong>Erfunden von: ' + safeText(w.name) + '</strong></p><p>' + safeText(w.ingredients) + '</p></article>').join("");
+        winnersSection.hidden = false;
+      }
       async function loadSales() {
         const { data, error } = await supabase.from("sales_counters").select("id,total,updated_at");
         if (error || !data) { showError(); return; }
@@ -175,8 +207,9 @@
         updatedEl.classList.remove("error");
       }
       loadSales();
-      setInterval(loadSales, 10000);
-      document.addEventListener("visibilitychange", () => { if (!document.hidden) loadSales(); });
+      loadWinners();
+      setInterval(() => { loadSales(); loadWinners(); }, 10000);
+      document.addEventListener("visibilitychange", () => { if (!document.hidden) { loadSales(); loadWinners(); } });
     }
   </script>
 </body>
