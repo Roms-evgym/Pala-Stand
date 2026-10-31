@@ -47,12 +47,15 @@
     .chart-empty { color:var(--muted); text-align:center; font-size:.9rem; padding:20px 0; }
     .updated { min-height:1.4em; margin:14px 0 0; text-align:center; font-size:.84rem; color:var(--muted); }
     .error { color:#9e2828; }
+    .back-link { display:inline-flex; align-items:center; gap:8px; margin-bottom:20px; padding:10px 15px; border:1px solid var(--line); border-radius:999px; color:var(--brown); background:#fff8ed; text-decoration:none; font-weight:800; transition:background .2s,transform .2s; }
+    .back-link:hover { background:#fff0d5; transform:translateY(-1px); }
     footer { margin-top:24px; text-align:center; font-size:.8rem; color:var(--muted); }
     footer a { color:inherit; }
   </style>
 </head>
 <body>
   <main>
+    <a class="back-link" href="./index.html">← Zurück zur Startseite</a>
     <header>
       <div class="emoji" aria-hidden="true">🥞</div>
       <p class="eyebrow">Frisch aus der Pfanne</p>
