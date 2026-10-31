@@ -89,6 +89,7 @@
         <article class="item" data-counter="nutella"><h2>Leon Pala (Nougat Nuss)</h2><span class="count" id="count-nutella">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Leon Pala (Nougat Nuss) zurücksetzen</button></div></article>
         <article class="item" data-counter="himbeere"><h2>Sachertorten Pala</h2><span class="count" id="count-himbeere">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Sachertorten Pala zurücksetzen</button></div></article>
         <article class="item" data-counter="powidl"><h2>Papa (Zwetschke Mohn)</h2><span class="count" id="count-powidl">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Papa (Zwetschke Mohn) zurücksetzen</button></div></article>
+        <article class="item" data-counter="sieger_pala"><h2>🏆 Sieger-Palatschinke</h2><span class="count" id="count-sieger_pala">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Sieger-Palatschinke zurücksetzen</button></div></article>
         <article class="item" data-counter="kaffee"><h2>Kaffee · eigene Kategorie</h2><span class="count" id="count-kaffee">…</span><div class="actions"><button class="button" data-action="increment" type="button">＋ 1</button><button class="button secondary" data-action="decrement" type="button">− 1</button><button class="button danger reset" data-action="reset" type="button">↺ Kaffee zurücksetzen</button></div></article>
       </section>
 
@@ -102,7 +103,7 @@
       </section>
       <section class="stats" aria-labelledby="stats-heading">
         <h2 id="stats-heading">Verkaufsstatistiken</h2>
-        <p class="stats-intro">Alle Palatschinken-Sorten im Vergleich; Kaffee wird separat gezählt und nicht in die Diagramme aufgenommen.</p>
+        <p class="stats-intro">Alle Palatschinken-Sorten im Vergleich; Kaffee wird separat gezählt und nicht in die Diagramme aufgenommen. Die Sieger-Palatschinke wird mitgezählt.</p>
         <div class="chart-grid">
           <article class="chart-card"><h3>Kreisdiagramm · Anteile</h3><div class="pie-layout"><div class="pie" id="pie-chart" role="img" aria-label="Kreisdiagramm der Palatschinken-Verkäufe"></div><div class="legend" id="pie-legend"></div></div></article>
           <article class="chart-card"><h3>Balkendiagramm · Vergleich</h3><div class="bar-list" id="bar-chart"></div></article>
@@ -119,7 +120,7 @@
   <script src="./config.js"></script>
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "kaffee"];
+    const ids = ["marille", "erdbeere", "nutella", "himbeere", "powidl", "sieger_pala", "kaffee"];
     const fmt = new Intl.NumberFormat("de-AT");
     const loginForm = document.getElementById("login-form");
     const loginStatus = document.getElementById("login-status");
@@ -141,7 +142,8 @@
         { id: "erdbeere", label: "Lisa Pala (Erdbeer)", color: "#e05252" },
         { id: "nutella", label: "Leon Pala (Nougat Nuss)", color: "#76513b" },
         { id: "himbeere", label: "Sachertorten Pala", color: "#5b2b1b" },
-        { id: "powidl", label: "Papa (Zwetschke Mohn)", color: "#6554a4" }
+        { id: "powidl", label: "Papa (Zwetschke Mohn)", color: "#6554a4" },
+        { id: "sieger_pala", label: "Sieger-Palatschinke", color: "#c08a22" }
       ];
       function renderStats(values) {
         const total = flavors.reduce((sum, item) => sum + values[item.id], 0);
