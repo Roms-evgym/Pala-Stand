@@ -42,4 +42,13 @@ revoke all on function public.stop_pala_contest() from public;
 grant execute on function public.submit_pala_guess(text,integer,text,text) to anon,authenticated;
 grant execute on function public.start_pala_contest() to authenticated;
 grant execute on function public.stop_pala_contest() to authenticated;
+
+-- Oeffentliche, auf Gewinner beschraenkte Ansicht fuer die Zaehlseite.
+-- Die Ansicht gibt ausschliesslich Gewinnernamen und deren Palatschinken-Daten frei.
+create or replace view public.pala_contest_winners as
+ select id, name, pancake_name, ingredients
+ from public.pala_contest_entries
+ where is_winner = true;
+grant select on public.pala_contest_winners to anon, authenticated;
+
 notify pgrst,'reload schema';
