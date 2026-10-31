@@ -21,7 +21,7 @@ end; $$;
 create or replace function public.start_pala_contest() returns void language plpgsql security definer set search_path='' as $$
 begin
  if auth.uid() is null then raise exception 'Admin-Anmeldung erforderlich'; end if;
- delete from public.pala_contest_entries;
+ delete from public.pala_contest_entries where true;
  update public.pala_contest set active=true,stopped_at=null,final_total=null where id=true;
 end; $$;
 create or replace function public.stop_pala_contest() returns bigint language plpgsql security definer set search_path='' as $$
