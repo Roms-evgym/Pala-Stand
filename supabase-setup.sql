@@ -12,7 +12,7 @@ create table if not exists public.sales_counters (
 alter table public.sales_counters drop constraint if exists sales_counters_id_check;
 alter table public.sales_counters
   add constraint sales_counters_id_check
-  check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee', 'kaefer'));
+  check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee', 'kaefer', 'sieger_pala'));
 
 -- Falls der alte Käfer-Zähler existiert, übernehmen wir seinen Wert in Kaffee.
 do $$
