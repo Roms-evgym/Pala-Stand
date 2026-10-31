@@ -51,4 +51,8 @@ create or replace view public.pala_contest_winners as
  where is_winner = true;
 grant select on public.pala_contest_winners to anon, authenticated;
 
+
+-- Eigener Verkaufszaehler fuer die Sieger-Palatschinke.
+insert into public.sales_counters(id,total) values('sieger_pala',0) on conflict(id) do nothing;
+
 notify pgrst,'reload schema';
