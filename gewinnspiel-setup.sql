@@ -53,6 +53,8 @@ grant select on public.pala_contest_winners to anon, authenticated;
 
 
 -- Eigener Verkaufszaehler fuer die Sieger-Palatschinke.
-insert into public.sales_counters(id,total) values('sieger_pala',0) on conflict(id) do nothing;
+alter table public.sales_counters drop constraint if exists sales_counters_id_check;
+alter table public.sales_counters add constraint sales_counters_id_check check (id in ('marille','erdbeere','nutella','himbeere','powidl','kaffee','kaefer','sieger_pala'));
+insert into public.sales_counters(id,label,total,updated_at) values('sieger_pala','Sieger-Palatschinke',0,null) on conflict(id) do nothing;
 
 notify pgrst,'reload schema';
