@@ -2,7 +2,7 @@
 -- Dieses Skript kann mehrfach ausgeführt werden. Bestehende Tabelle public.sales bleibt unverändert.
 
 create table if not exists public.sales_counters (
-  id text primary key check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee', 'kaefer')),
+  id text primary key check (id in ('marille', 'erdbeere', 'nutella', 'himbeere', 'powidl', 'kaffee', 'kaefer', 'sieger_pala')),
   label text not null,
   total bigint not null default 0 check (total >= 0),
   updated_at timestamptz
@@ -35,6 +35,7 @@ $$;
 
 insert into public.sales_counters (id, label, total, updated_at) values
   ('marille', 'Marille', 0, null),
+  ('sieger_pala', 'Sieger-Palatschinke', 0, null),
   ('erdbeere', 'Erdbeere', 0, null),
   ('nutella', 'Nutella', 0, null),
   ('himbeere', 'Himbeere', 0, null),
